@@ -1,6 +1,6 @@
 import re
 from ..models import TocEntries
-from ..openai_client import client
+from ..openai_client import get_openai_client
 import os
 from ..normalize import format_toccontent_for_tocpage
 
@@ -27,6 +27,7 @@ def extract_page_from_content(page_contents, sections,toc_end_page=None):
     doc_block = "- Document Text given as:\n" + document_text
 
     try:
+        client = get_openai_client()
         response = client.responses.parse(
             instructions=instructions,
             input=[{"role": "user", "content": f"{toc_block}\n\n{doc_block}"}],

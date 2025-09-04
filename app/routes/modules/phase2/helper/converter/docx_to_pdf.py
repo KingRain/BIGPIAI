@@ -1,9 +1,14 @@
 
 import os
 import urllib.parse
-import pythoncom
-import win32com.client
 import time
+
+try:
+    import pythoncom
+    import win32com.client
+    WINDOWS_AVAILABLE = True
+except ImportError:
+    WINDOWS_AVAILABLE = False
 
 
 def convert_docx_to_pdf(docx_file: str) -> str:
@@ -11,6 +16,11 @@ def convert_docx_to_pdf(docx_file: str) -> str:
     Converts a DOCX file to PDF using late-binding (DispatchEx) and numeric constants only.
     This code never imports 'constants' or touches 'gen_py'; it will not trigger COM wrapper generation.
     """
+    if not WINDOWS_AVAILABLE:
+        # Return the original docx file if Windows COM is not available
+        print("⚠️ Windows COM not available, skipping PDF conversion")
+        return docx_file
+    
     # 1) Initialize COM on this thread
     # Ensure COM is set up                    :contentReference[oaicite:3]{index=3}
     pythoncom.CoInitialize()

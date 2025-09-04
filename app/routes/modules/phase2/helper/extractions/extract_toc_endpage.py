@@ -1,7 +1,7 @@
 # Add the parent directory to sys.path
 import os
 import sys
-from ..openai_client import client
+from ..openai_client import get_openai_client
 from pydantic import BaseModel, Field
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -29,6 +29,7 @@ def extract_toc_endpage(page_contents):
         instructions = f.read()
 
     try:
+        client = get_openai_client()
         response = client.responses.parse(
             model="gpt-4o-mini",
             instructions=instructions,

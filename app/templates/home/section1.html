@@ -3,17 +3,13 @@
     <section id="header" class="bg-white shadow-md fixed w-full top-0 z-50">
       <nav class="container mx-auto px-4">
         <div class="flex justify-between items-center py-4">
-          <!-- Logo -->
           <div class="flex items-center">
             <a href="#hero">
               <img src="/static/images/logo.jpg" alt="Logo" class="h-8" />
             </a>
-            <!-- <a href="#hero" class="text-2xl font-bold text-blue-600"
-                    >BigpicAI</a
-                  > -->
           </div>
 
-          <!-- Desktop Menu -->
+
           <div class="hidden md:flex space-x-6">
             <a
               href="#hero"
@@ -28,12 +24,17 @@
             <a
               href="#phase1-start"
               class="font-medium text-gray-700 hover:text-blue-600 transition-colors duration-300"
-              >Create Writing Plan</a
+              >Writing Plan</a
             >
             <a
               href="#phase2-start"
               class="font-medium text-gray-700 hover:text-blue-600 transition-colors duration-300"
               >Generate Template</a
+            >
+            <a
+              href="#phase3-start"
+              class="font-medium text-gray-700 hover:text-blue-600 transition-colors duration-300"
+              >CV Generation</a
             >
 
             <a
@@ -59,7 +60,7 @@
             {% endif %}
           </div>
 
-          <!-- Mobile menu button -->
+
           <div class="md:hidden">
             <button
               id="mobile-menu-button"
@@ -84,7 +85,7 @@
           </div>
         </div>
 
-        <!-- Mobile Menu -->
+
         <div
           id="mobile-menu"
           class="md:hidden hidden pb-4 animate__animated animate__fadeIn"
@@ -103,12 +104,17 @@
             <a
               href="#phase1-start"
               class="font-medium text-gray-700 hover:text-blue-600 transition-colors duration-300"
-              >Phase 1</a
+              >Writing Plan</a
             >
             <a
               href="#phase2-start"
               class="font-medium text-gray-700 hover:text-blue-600 transition-colors duration-300"
-              >Phase 2</a
+              >Generate Template</a
+            >
+            <a
+              href="#phase3-start"
+              class="font-medium text-gray-700 hover:text-blue-600 transition-colors duration-300"
+              >CV Generation</a
             >
             {% if request.cookies.get('access_token_cookie') %}
             <a

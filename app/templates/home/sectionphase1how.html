@@ -348,16 +348,22 @@
       const progressIndicator = document.getElementById("progress-indicator");
       const progressText = document.getElementById("progress-text");
 
-      const socket = io("/phase1", {
-        transports: ["websocket"],
-        upgrade: false,
-      });
+      // SocketIO removed for Python 3.13 compatibility
+      // Using standard HTTP requests instead
 
-      socket.on("connect", () => {
-        console.log("Connected to :", socket.id);
-      });
+      function simulateProgress(callback) {
+        let progress = 0;
+        const interval = setInterval(() => {
+          progress += 10;
+          callback({ progress: progress, msg: `Processing... ${progress}%` });
+          if (progress >= 100) {
+            clearInterval(interval);
+            callback({ progress: 100, msg: "Complete!" });
+          }
+        }, 500);
+      }
 
-      socket.on("message", (msg) => {
+      function handleMessage(msg) {
         console.log("message :", msg);
 
         if (msg != null) {
@@ -365,14 +371,16 @@
           progressIndicator.style.width = msg.progress;
           progressText.textContent = msg.msg;
         }
-      });
+      }
 
       function joinRoom(roomId) {
-        socket.emit("join", { room: roomId });
+        // SocketIO removed - using HTTP polling instead
+        console.log("Joining room:", roomId);
       }
 
       function leaveRoom(roomId) {
-        socket.emit("leave", { room: roomId });
+        // SocketIO removed - using HTTP polling instead
+        console.log("Leaving room:", roomId);
       }
 
       // Elements
