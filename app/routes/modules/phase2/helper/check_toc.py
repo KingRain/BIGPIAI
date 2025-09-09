@@ -1,6 +1,6 @@
 
 
-from openai_client import get_openai_client
+from openai_client import client
 from normalize import format_content_for_toc_check
 
 
@@ -19,7 +19,7 @@ def check_toc_in_pdf(pdf_content):
     )
 
     try:
-        client = get_openai_client()
+
         response = client.chat.completions.create(
             messages=[{"role": "user", "content": prompt}],
             model="gpt-4o-mini",

@@ -20,19 +20,9 @@ from .models import SectionEntries
 # Load environment variables from .env file
 load_dotenv(override=True)
 
-# Global client variable
-client = None
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
-def get_openai_client():
-    """Get OpenAI client with lazy initialization"""
-    global client
-    if client is None:
-        api_key = os.getenv("OPENAI_API_KEY")
-        if api_key is None:
-            raise ValueError("OPENAI_API_KEY environment variable is not set")
-        openai.api_key = api_key
-        client = openai.OpenAI(api_key=api_key)
-    return client
+client = openai.OpenAI()
 
 
 def extract_content_with_openai2(docx_file):
@@ -49,7 +39,6 @@ def extract_content_with_openai2(docx_file):
         instructions = f.read()
 
     try:
-        client = get_openai_client()
         response = client.responses.parse(
             model="gpt-4o-mini",
             instructions=instructions,
@@ -182,7 +171,6 @@ RULES:
 """
 
     try:
-        client = get_openai_client()
         response = client.chat.completions.create(
             messages=[{"role": "user", "content": prompt}],
             model="gpt-4o-mini",

@@ -10,7 +10,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 def import_custom():
-    from openai_client import get_openai_client
+    from openai_client import client
     from normalize import (
         format_content_for_toc_endpage_extraction,
         read_pdf,
@@ -19,7 +19,7 @@ def import_custom():
         format_non_toc_page_for_extraction
     )
     return (
-        get_openai_client,
+        client,
         format_content_for_toc_endpage_extraction,
         read_pdf,
         format_toc_page_for_extraction,
@@ -27,7 +27,7 @@ def import_custom():
     )
 
 
-get_openai_client, \
+client, \
     format_content_for_toc_endpage_extraction, \
     read_pdf, \
     format_toc_page_for_extraction, \
@@ -48,7 +48,6 @@ def extract_toc_from_toc_page(page_contents):
         instructions = f.read()
 
     try:
-        client = get_openai_client()
         response = client.responses.parse(
             model="gpt-4o-mini",
             instructions=instructions,
@@ -82,7 +81,6 @@ def extract_toc_from_nontoc_content(page_contents):
         instructions = f.read()
 
     try:
-        client = get_openai_client()
         response = client.responses.parse(
             instructions=instructions,
             input=[{"role": "user", "content": document_text}],

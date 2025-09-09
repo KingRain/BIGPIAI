@@ -307,18 +307,24 @@
     document.addEventListener("DOMContentLoaded", function () {
       const cliContainer = document.getElementById('typingContainer');
 
-      // SocketIO removed for Python 3.13 compatibility
-      // Using standard HTTP requests instead
+      //sockets
+      const socket = io('/phase2',{
+        transports: ['websocket'],
+        upgrade: false             
+      });
+      socket.on("connect", () => {
+        console.log("Connected to :", socket.id);
+      });
 
       function joinRoom(roomId) {
-        console.log("Joining room:", roomId);
+        socket.emit("join", { room: roomId });
       }
 
       function leaveRoom(roomId) {
-        console.log("Leaving room:", roomId);
+        socket.emit("leave", { room: roomId });
       }
 
-      function handleMessage(msg) {
+      socket.on('message', (msg) => {
         console.log('message :',msg)
         addMessageContainer(cliContainer,msg['msg']);
 
@@ -327,7 +333,7 @@
           console.log("setting progress to:", msg.progress);
           progressIndicator.style.width = msg.progress;
         }
-      }
+      });
 
      
       // Elements

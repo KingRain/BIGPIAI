@@ -1,15 +1,10 @@
 
+from win32com.client import DispatchEx, constants
+import win32com
+import pythoncom
 import os
+import win32com.client
 import time
-
-try:
-    from win32com.client import DispatchEx, constants
-    import win32com
-    import pythoncom
-    import win32com.client
-    WINDOWS_AVAILABLE = True
-except ImportError:
-    WINDOWS_AVAILABLE = False
 
 
 def create_docx_start_endpage(input_path: str,
@@ -31,13 +26,6 @@ def create_docx_start_endpage(input_path: str,
       - Never imports 'constants' or iterates 'doc.TablesOfContents'.
       - Updates everything via numeric VB constants only.
     """
-    if not WINDOWS_AVAILABLE:
-        print("⚠️ Windows COM not available, skipping document splitting")
-        # Just copy the input file to output as a fallback
-        import shutil
-        shutil.copy2(input_path, output_path)
-        return
-    
     # 1) Convert to absolute paths
     input_path = os.path.abspath(input_path)
     output_path = os.path.abspath(output_path)

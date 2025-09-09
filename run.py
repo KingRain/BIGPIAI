@@ -1,25 +1,44 @@
-#!/usr/bin/env python3
-"""
-WSGI Entry Point for Production Deployment
-This file is used by production servers like Gunicorn and Waitress.
-"""
-import os
-from pathlib import Path
-from dotenv import load_dotenv
 
-# Load environment variables
-load_dotenv()
+import eventlet
+eventlet.monkey_patch()
 
-# Add project root to Python path
-project_root = Path(__file__).parent
-import sys
-sys.path.insert(0, str(project_root))
+print("🔧 Starting BIGPIAI application...")
 
-# Create Flask application
-from app import create_app
+from app import create_app, socketio
+print("✅ App modules imported successfully")
 
 app = create_app()
+print("✅ Flask app created successfully")
 
 if __name__ == '__main__':
-    # This is for direct execution (development only)
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    import os
+    
+    # Check if running in production mode
+    is_production = os.getenv('PRODUCTION', 'false').lower() == 'true'
+    
+    if is_production:
+        print("🚀 Starting PRODUCTION SocketIO server with eventlet...")
+        print("   Host: 0.0.0.0")
+        print("   Port: 80")
+        print("   Debug: False")
+        print("=" * 50)
+        
+        # For production deployment with eventlet
+        socketio.run(app, host='0.0.0.0', port=80, debug=False, use_reloader=False)
+    else:
+        print("🚀 Starting DEVELOPMENT SocketIO server...")
+        print("   Host: 127.0.0.1")
+        print("   Port: 5000")
+        print("   Debug: True")
+        print("   Access at: http://127.0.0.1:5000")
+        print("=" * 50)
+        
+        # For local development - enable debug mode but disable reloader for testing
+        socketio.run(app, host='127.0.0.1', port=5000, debug=True, use_reloader=False)
+
+# PRODUCTION USAGE:
+# Set environment variable: PRODUCTION=true
+# Then run: python run.py
+# 
+# ALTERNATIVE: Use gunicorn with eventlet worker for production:
+# gunicorn --worker-class eventlet -w 1 --bind 0.0.0.0:80 run:app
